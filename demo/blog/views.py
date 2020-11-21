@@ -12,7 +12,7 @@ def add1(request):
         return HttpResponse(str(c))
 def index(request):
 	a=Article.objects.values("title").count()
-	if a>6:
+	if a>20:
 		aa=Article.objects.all().prefetch_related("author").order_by("-id")[:6]
 	
 	else:
@@ -25,6 +25,7 @@ def index(request):
 		wz[n]['bt']=i.title
 		wz[n]['wza']=i.content[0:45]
 		wz[n]['core']=i.score
+		wz[n]['id']=i.id
 		try:
 			wz[n]['tags']=i.tags.all()[0]
 		except Exception as f:
@@ -34,8 +35,14 @@ def index(request):
 	time.sleep(1)
 	return  render(request,'index.html',{'string': string,"a":a,'wz':wz})
 def index1(request):
+	ido = request.GET['id']
+	sc=Article.objects.filter(id=ido)[0].score+1
+	c=Article.objects.filter(id=ido)
+	c.update(score=sc)
+	a=Article.objects.get(id=ido)
+	wz={"zz":a.author.name,"bt":a.title,"wza":a.content,"core":a.score,"tags":a.tags.all()[0]}
 	string = time.strftime("%Y-%m-%d %H:%M",time.localtime(time.time()))
-	return  render(request,'home.html',{'string': string})
+	return  render(request,'home.html',{'string': string,'wz':wz},)
 def indexa(request):
         List= ['a','b','c','','d']
         Dict={"one":'it one','two':'it two'}
