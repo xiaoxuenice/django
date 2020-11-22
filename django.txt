@@ -1,4 +1,7 @@
 rm -rf demo{1,2,3,4} && for i in `seq 1 4`;do cp -r demo demo${i} ;done &&  systemctl restart supervisord.service
+导出app数据 python3 manage.py dumpdata blog > a.json
+导入app数据 python3 manage.py loaddata a.json
+导出用户数据 python3 manage.py dumpdata auth > auth.json
 pip3 install pymysql
 pip3 install django
 django-admin startproject   django	#创建django项目
