@@ -5,10 +5,10 @@ urlpatterns = [
     path("",index),
     path("user/",index1),
     path('admin/', admin.site.urls),
-    path("a/",indexa),
     path("and/",add1),
     path("add/",add1),
-    path("q/",indexq),
-    path("c/",indexc),
+    path("a/",indexa),
+    path("login/",login),
+    path("logout/",logout),
     path("404/",error),
 ]

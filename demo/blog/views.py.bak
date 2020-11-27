@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 import time
@@ -37,6 +36,7 @@ def index(request):
 				wz[n]['tags']='好心情'
 			n+=1
 		string = time.strftime("%Y-%m-%d %H:%M",time.localtime(time.time()))
+		time.sleep(1)
 		return  render(request,'index.html',{'string': string,"a":a,'wz':wz,'name':request.session['name']})
 	else:
 		return HttpResponseRedirect("/login/")
@@ -57,23 +57,19 @@ def index1(request):
 def indexa(request):
         List= ['a','b','c','','d']
         Dict={"one":'it one','two':'it two'}
-        return render(request,'a.html',{'List': List,'var':100,'test': 'it test',"Dict":Dict})
+        return render(request,'a.html',{'List': List,'var':100,'test': 'it test',"Dict":Dict}
 
 @csrf_exempt
 def login(request):
-	if request.method == 'POST':
-		try:
-			m= Author.objects.get(email=request.POST['username'])
-			if str(m.qq) == str(request.POST['password']):
-				request.session['name']=m.name
-				request.session['login']=True
-				return HttpResponseRedirect("/")
-			else:
-				return HttpResponseRedirect("/login/")
-		except  Exception as f:
-				return HttpResponseRedirect("/login/")
-	return render(request,'login.html')
+	return  render(request,'a.html')
+#	if request.method == 'POST':
+#		m= Author.objects.get(email=request.POST['username'])
+#		if str(m.qq) == str(request.POST['password']):
+#			request.session['name']=m.name
+#			request.session['login']=True
+#			return HttpResponseRedirect("")
+#		else:
+#			return HttpResponseRedirect("/login/")
 def logout(request):
-	cache._cache.flush_all()
-	request.session.flush()
+	request.session.clear()
 	return HttpResponseRedirect("/login/")
