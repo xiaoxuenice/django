@@ -31,10 +31,10 @@
               <li class="cat-item"><a href="/">Home</a>
               </li>
 
-              <li class="cat-item"><a href="/user">I GUESS</a>
+              <li class="cat-item"><a href="/jiankong">主机信息</a>
               </li>
 
-              <li class="cat-item"><a href="">you need</a>
+              <li class="cat-item"><a href="/admin">后台管理</a>
               </li>
               <li class="cat-item"><a href="/logout">EXIT</a>
 
@@ -53,8 +53,13 @@
                	 <h1 class="title"><a href="">{{ wz.bt }}</a></h1>
              	 </div>
               	 <div class="post-bd">
-                 <p> {{ wz.wza }} </p>
-                 <p><a href="#" class="more-link"></a></p>
+                 <p> {{ wz.wza }} 
+		
+		{% for i in images %}
+		<img src="/static/media/{{ i }}"</p>
+                {% endfor %}
+
+		 <p><a href="#" class="more-link"></a></p>
                  </div>
                  <div class="post-ft">
                  <a href="#" class="more">作者: {{ wz.zz }}</a>
@@ -75,16 +80,18 @@
 <div class="col-lg-3">
   <!-- tags -->
   <div id="cloudtag">
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
-    <a href="#">Python</a>
+    <a href="#">python</a>
+    <a href="#">shell</a>
+    <a href="#">linux</a>
+    <a href="#">docker</a>
+    <a href="#">reboot</a>
+    <a href="#">django</a>
+    <a href="#">tkinter</a>
+    <a href="#">psutil</a>
+    <a href="#">kubernetes</a>
+    <a href="#">nginx</a>
+    <a href="#">uWSGI</a>
+
   </div>
 </div>
 </div>

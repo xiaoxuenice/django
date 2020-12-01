@@ -49,9 +49,11 @@ def index1(request):
 		c=Article.objects.filter(id=ido)
 		c.update(score=sc)
 		a=Article.objects.get(id=ido)
+		imageid=Article.objects.get(id=ido).image
+		images=[i.image.name for i  in Images.objects.filter(image__contains=imageid)]
 		wz={"zz":a.author.name,"bt":a.title,"wza":a.content,"core":a.score,"tags":a.tags.all()[0]}
 		string = time.strftime("%Y-%m-%d %H:%M",time.localtime(time.time()))
-		return  render(request,'home.html',{'string': string,'wz':wz,'name':request.session['name']})
+		return  render(request,'home.html',{'string': string,'wz':wz,'name':request.session['name'],'images':images})
 	else:
 		return HttpResponseRedirect("/login/")
 def indexa(request):
@@ -77,3 +79,60 @@ def logout(request):
 	cache._cache.flush_all()
 	request.session.flush()
 	return HttpResponseRedirect("/login/")
+def receive(request):
+	host=request.GET['host']
+	qdsj=request.GET['qdsj']
+	cpuhs=request.GET['cpuhs']
+	cpulv=request.GET['cpulv']
+	ncdx=request.GET['ncdx']
+	nclv=request.GET['nclv']
+	cpdx=request.GET['cpdx']
+	cpsy=request.GET['cpsy']
+	wkjs=request.GET['wkjs']
+	wkfs=request.GET['wkfs']
+	ljs=request.GET['ljs']
+	jcs=request.GET['jcs']
+	timeo=time.strftime("%Y%m%d%H%M%S",time.localtime(time.time()))
+	de=int(time.strftime("%Y%m%d",time.localtime(time.time())))-1
+	if '1200' == time.strftime("%H%M",time.localtime(time.time())) or '1201' == time.strftime("%H%M",time.localtime(time.time())): #每天12点删除前一天监控日志
+		Host.objects.filter(time__contains=str(de)).delete()
+	try:
+		hostid=Hostnamea.objects.get(hostname=host).id
+	except Exception as f:
+		Hostnamea.objects.create(hostname=host)
+		hostid=Hostnamea.objects.get(hostname=host).id
+	Host.objects.create(time=timeo,host_id=hostid,qdsj=qdsj,cpuhs=cpuhs,cpulv=cpulv,cpsy=cpsy,ncdx=ncdx,nclv=nclv,cpdx=cpdx,wkjs=wkjs,wkfs=wkfs,ljs=ljs,jcs=jcs)
+	return HttpResponse("ok")
+def jiankong(request):
+	sj=int(time.strftime("%Y%m%d%H%M",time.localtime(time.time())))-1
+	sjnow=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
+	zhuji=[] #获取id
+	qbzj=[]	#全部主机
+	a=Hostnamea.objects.all().prefetch_related()
+	for i in a:
+		zhuji.append(i.id)
+		qbzj.append(i.hostname)
+	xx=[]
+	hqbd=[]	#获取不到
+	n=0
+	for i in zhuji:
+		try:
+			aa=Host.objects.all().prefetch_related('host').filter(time__contains=str(sj)).order_by('-time').filter(host_id=i)[0]
+			xx.append({})
+			xx[n]['host']=aa.host.hostname
+			xx[n]['qdsj']=aa.qdsj
+			xx[n]['hqsj']=aa.time[0:4]+"-"+aa.time[4:6]+"-"+aa.time[6:8]+" "+aa.time[8:10]+":"+aa.time[10:12]+":"+aa.time[12:14]
+			xx[n]['cpuhs']=aa.cpuhs
+			xx[n]['cpulv']=aa.cpulv
+			xx[n]['ncdx']=aa.ncdx
+			xx[n]['nclv']=aa.nclv
+			xx[n]['cpdx']=aa.cpdx
+			xx[n]['cpsy']=aa.cpsy
+			xx[n]['wkjs']=aa.wkjs
+			xx[n]['wkfs']=aa.wkfs
+			xx[n]['ljs']=aa.ljs
+			xx[n]['jcs']=aa.jcs
+		except Exception as f:
+			hqbd.append(Hostnamea.objects.get(id=i).hostname)
+		n+=1
+	return  render(request,'jiankong.html',{'xx':xx,'sjnow':sjnow,'hqbd':hqbd,'qbzj':qbzj})
