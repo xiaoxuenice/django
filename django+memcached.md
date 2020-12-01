@@ -38,7 +38,7 @@ urlpatterns = [<br>
 <html><br>
 {% load cache %}    #加载缓存<br>
 <body><br>
-<h1>{{ ctime }}</h1><br>
+{{ ctime }}<br>
 {% cache 15 'aaa' %}   #设定超时时间为15秒<br>
 {{ ctime }}<br>
 {% endcache %}<br>
