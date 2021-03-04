@@ -1,3 +1,4 @@
+#!/bin/bash
 # yum -y install memcached  libevent libevent-dev<br>
 # memcached -d -m 512 -l 127.0.0.1 -p 11211 -u root<br>
 # pip3 install python-memcached<br>
