@@ -3,17 +3,25 @@ from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 import time
+from blog.add1 import *
 from blog.models import *
 from django.shortcuts import HttpResponse
 from django.http import HttpResponseRedirect
 from .forms import AddForm
 def error(request):
        return  HttpResponse(str("别瞎研究，你看不懂"))
-def add1(request):
+def add(request):
+        for i in ['a','b']:
+              if i not in request.GET:
+                 return HttpResponse('请添加参数a和b')
         a = request.GET['a']
         b = request.GET['b']
+        if request.META.get('HTTP_X_FORWARDED_FOR'):
+           ip= request.META.get('HTTP_X_FORWARDED_FOR')
+        else:
+           ip= request.META.get('REMOTE_ADDR')
         c = int(a)+int(b)
-        return HttpResponse(str(c))
+        return HttpResponse(str(c)+str(ip))
 @cache_page(60 * 2)
 def index(request):
 	if request.session.get("login",None):
